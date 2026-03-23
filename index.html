@@ -36,30 +36,35 @@
         .week-header-2 { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
         .week-header-3 { background: linear-gradient(135deg, #ef6c00, #ffb74d); }
         
-        .table-wrapper { overflow-x: auto; background: #fcfdff; padding: 0; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        th { background: #133d62; color: white; padding: 12px 15px; font-weight: 500; text-align: left; }
-        td { padding: 12px 15px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+        /* Grid view styles */
+        .week-content { padding: 24px; background: #f8fafc; }
         
-        .sheet-header-row { background: #f1f5f9; }
-        .sheet-header-row td { padding: 10px 15px; font-weight: 600; background: #f8fafc; }
-        .day-header-row td { padding: 8px 15px; font-weight: 500; background: #fef9e3; }
-        .date-header-row td { padding: 6px 15px; font-weight: 500; background: #fef2e0; }
+        .group-section { margin-bottom: 32px; }
+        .group-title { font-size: 1.3rem; font-weight: 700; color: #1e4663; background: #e6f0fa; padding: 10px 20px; border-radius: 40px; display: inline-block; margin-bottom: 20px; border-left: 4px solid #004182; }
         
-        .date-header-value { font-weight: 700; font-size: 1rem; background: rgba(0,0,0,0.08); padding: 4px 14px; border-radius: 30px; color: #1e4663; display: inline-block; }
-        .day-header-value { font-weight: 500; font-size: 1rem; color: #1e4663; }
-        .sheet-header-value { font-weight: 600; font-size: 1rem; background: rgba(0,0,0,0.05); padding: 4px 14px; border-radius: 30px; display: inline-block; }
+        .day-grid { margin-bottom: 28px; }
+        .day-header { font-size: 1.2rem; font-weight: 600; color: #2c5a7a; background: #fef3c7; padding: 8px 16px; border-radius: 30px; display: inline-block; margin-bottom: 15px; }
         
-        .week-row-1 { background-color: #e8f5e9; }
-        .week-row-2 { background-color: #fff8e7; }
-        .week-row-3 { background-color: #ffe0b2; }
+        .date-grid { margin-bottom: 20px; }
+        .date-header { font-size: 1.1rem; font-weight: 600; color: #664d00; background: #fef9e3; padding: 6px 14px; border-radius: 25px; display: inline-block; margin-bottom: 12px; }
         
-        .lesson-number-emoji { display: inline-block; font-size: 1rem; margin-left: 6px; vertical-align: middle; }
-        .pair-roman { font-weight: 700; color: #1e4663; background: rgba(0,0,0,0.1); display: inline-block; min-width: 40px; text-align: center; padding: 4px 10px; border-radius: 25px; font-size: 1rem; margin-right: 15px; }
-        .room-info { font-weight: 500; color: #664d00; background: #f0e6d2; padding: 4px 12px; border-radius: 25px; display: inline-block; margin-left: 12px; margin-right: 12px; font-size: 0.85rem; }
-        .teacher-info { font-weight: 500; color: #003b6f; background: #d4e4ff; padding: 4px 12px; border-radius: 25px; display: inline-block; font-size: 0.85rem; }
-        .subject-text { font-weight: 500; }
-        .lesson-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
+        
+        .lesson-card { background: white; border-radius: 20px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: all 0.2s; }
+        .lesson-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: #cbd5e1; }
+        
+        .lesson-card-week1 { border-left: 4px solid #1565c0; }
+        .lesson-card-week2 { border-left: 4px solid #2e7d32; }
+        .lesson-card-week3 { border-left: 4px solid #ef6c00; }
+        
+        .lesson-pair { display: inline-block; background: #1e4663; color: white; border-radius: 30px; padding: 4px 12px; font-size: 0.8rem; font-weight: 600; margin-bottom: 10px; }
+        .lesson-subject { font-size: 1rem; font-weight: 500; color: #0f2b3d; margin-bottom: 10px; line-height: 1.4; }
+        .lesson-number-badge { display: inline-block; background: #004182; color: white; border-radius: 20px; padding: 2px 8px; font-size: 0.7rem; margin-left: 8px; }
+        .lesson-details { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; padding-top: 10px; border-top: 1px solid #e2e8f0; }
+        .lesson-room { background: #f0e6d2; border-radius: 20px; padding: 4px 10px; font-size: 0.75rem; color: #664d00; display: inline-flex; align-items: center; gap: 4px; }
+        .lesson-teacher { background: #d4e4ff; border-radius: 20px; padding: 4px 10px; font-size: 0.75rem; color: #003b6f; display: inline-flex; align-items: center; gap: 4px; }
+        
+        .lesson-number-emoji { display: inline-block; font-size: 0.9rem; margin-left: 6px; vertical-align: middle; }
         
         .footer-note { margin-top: 24px; color: #346392; display: flex; gap: 32px; flex-wrap: wrap; font-size: 0.85rem; }
         .week-info { background: #f8f9fa; border-radius: 30px; padding: 10px 20px; margin-bottom: 20px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
@@ -71,16 +76,16 @@
         .color-key { display: flex; gap: 20px; margin-bottom: 15px; padding: 12px 20px; background: #f8f9fa; border-radius: 40px; flex-wrap: wrap; align-items: center; }
         .color-key-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
         .color-box { width: 30px; height: 20px; border-radius: 6px; }
-        .color-box.week1 { background: #e8f5e9; border-left: 4px solid #2e7d32; }
-        .color-box.week2 { background: #fff8e7; border-left: 4px solid #ef6c00; }
-        .color-box.week3 { background: #ffe0b2; border-left: 4px solid #f57c00; }
+        .color-box.week1 { background: #e3f2fd; border-left: 4px solid #1565c0; }
+        .color-box.week2 { background: #e8f5e9; border-left: 4px solid #2e7d32; }
+        .color-box.week3 { background: #fff8e7; border-left: 4px solid #ef6c00; }
         
         .button-group { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <h1>📊 Dars jadvali <small>Week → Group → Day → Date</small></h1>
+    <h1>📊 Dars jadvali <small>Week → Group → Day → Date (Grid View)</small></h1>
     
     <div class="color-key">
         <div class="color-key-item"><div class="color-box week1"></div><span>1-hafta</span></div>
@@ -124,7 +129,7 @@
     <div id="weeksContainer" class="weeks-grid"></div>
     
     <div class="footer-note">
-        <span>🔹 Har bir hafta alohida to'liq ko'rinishda, scrollsiz</span>
+        <span>🔹 Har bir hafta Grid View ko'rinishida (kartochkalar)</span>
         <span>🔹 Har bir hafta uchun alohida rasm export tugmasi</span>
         <span>🔢 Tartib raqamlari emoji ko'rinishida: 1️⃣, 2️⃣, 3️⃣...</span>
         <span>📅 Sana tanlash - JSON'dagi mavjud sanalardan</span>
@@ -189,10 +194,10 @@
     
     const dayOrder = ['Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba'];
     
-    function getWeekRowClass(week) {
-        if (week === 1) return 'week-row-1';
-        if (week === 2) return 'week-row-2';
-        if (week === 3) return 'week-row-3';
+    function getWeekCardClass(week) {
+        if (week === 1) return 'lesson-card-week1';
+        if (week === 2) return 'lesson-card-week2';
+        if (week === 3) return 'lesson-card-week3';
         return '';
     }
     
@@ -272,63 +277,98 @@
         updateDateFilter();
     }
     
-    function generateWeekHTML(weekNum, filteredLessons) {
+    function generateWeekGridHTML(weekNum, filteredLessons) {
         const weekLessons = filteredLessons.filter(l => l.week === weekNum);
         if (!weekLessons.length) return '';
         
+        // Group by sheetName
+        const groupedBySheet = {};
+        weekLessons.forEach(lesson => {
+            if (!groupedBySheet[lesson.sheetName]) groupedBySheet[lesson.sheetName] = [];
+            groupedBySheet[lesson.sheetName].push(lesson);
+        });
+        
         const weekHeaderClass = getWeekHeaderClass(weekNum);
+        const weekCardClass = getWeekCardClass(weekNum);
+        
         let html = `<div class="week-card" id="week-card-${weekNum}">
             <div class="week-header-card ${weekHeaderClass}">
                 <h2>📆 ${weekNum}-HAFTA</h2>
                 <button class="week-export-btn" onclick="exportWeekAsImage(${weekNum})">📸 Rasm sifatida saqlash</button>
             </div>
-            <div class="table-wrapper">
-                <table id="week-table-${weekNum}">
-                    <thead><tr><th style="width: 20%;">SANA / KUN / GURUH</th><th style="width: 80%;">O'TILADIGAN DARS</th></tr></thead>
-                    <tbody>`;
+            <div class="week-content">`;
         
-        let currentSheet = null, currentDay = null, currentDate = null;
+        // Sort sheets
+        const sortedSheets = Object.keys(groupedBySheet).sort();
         
-        weekLessons.forEach(lesson => {
-            const formattedDate = formatDisplayDate(lesson.date);
-            const weekRowClass = getWeekRowClass(weekNum);
+        sortedSheets.forEach(sheetName => {
+            const sheetLessons = groupedBySheet[sheetName];
             
-            if (currentSheet !== lesson.sheetName) {
-                currentSheet = lesson.sheetName;
-                currentDay = null;
-                currentDate = null;
-                html += `<tr class="sheet-header-row"><td colspan="2"><span class="sheet-header-value">👥 ${lesson.sheetName}</span><\/td><\/tr>`;
-            }
+            // Group by day
+            const groupedByDay = {};
+            sheetLessons.forEach(lesson => {
+                if (!groupedByDay[lesson.day]) groupedByDay[lesson.day] = [];
+                groupedByDay[lesson.day].push(lesson);
+            });
             
-            if (currentDay !== lesson.day) {
-                currentDay = lesson.day;
-                html += `<tr class="day-header-row"><td colspan="2"><span class="day-header-value">📅 ${lesson.day}</span><\/td><\/tr>`;
-                currentDate = null;
-            }
+            const sortedDays = Object.keys(groupedByDay).sort((a,b) => dayOrder.indexOf(a) - dayOrder.indexOf(b));
             
-            if (currentDate !== lesson.date) {
-                currentDate = lesson.date;
-                html += `<tr class="date-header-row"><td colspan="2"><span class="date-header-value">📆 ${formattedDate}</span><\/td><\/tr>`;
-            }
+            html += `<div class="group-section">
+                <div class="group-title">👥 ${sheetName}</div>`;
             
-            const lessonNumberEmoji = toNumberEmoji(lesson.lessonNumber);
-            const subjectDisplay = `${lesson.subject} <span class="lesson-number-emoji">${lessonNumberEmoji}</span>`;
-            const romanPair = toRoman(lesson.pair);
+            sortedDays.forEach(day => {
+                const dayLessons = groupedByDay[day];
+                
+                // Group by date within day
+                const groupedByDate = {};
+                dayLessons.forEach(lesson => {
+                    if (!groupedByDate[lesson.date]) groupedByDate[lesson.date] = [];
+                    groupedByDate[lesson.date].push(lesson);
+                });
+                
+                const sortedDates = Object.keys(groupedByDate).sort((a,b) => dateToNumber(a) - dateToNumber(b));
+                
+                html += `<div class="day-grid">
+                    <div class="day-header">📅 ${day}</div>`;
+                
+                sortedDates.forEach(date => {
+                    const dateLessons = groupedByDate[date];
+                    const formattedDate = formatDisplayDate(date);
+                    
+                    html += `<div class="date-grid">
+                        <div class="date-header">📆 ${formattedDate}</div>
+                        <div class="lessons-grid">`;
+                    
+                    // Sort lessons by pair
+                    dateLessons.sort((a,b) => a.pair - b.pair);
+                    
+                    dateLessons.forEach(lesson => {
+                        const lessonNumberEmoji = toNumberEmoji(lesson.lessonNumber);
+                        const romanPair = toRoman(lesson.pair);
+                        
+                        html += `<div class="lesson-card ${weekCardClass}">
+                            <div class="lesson-pair">${romanPair} - juftlik</div>
+                            <div class="lesson-subject">
+                                ${lesson.subject}
+                                <span class="lesson-number-badge">${lessonNumberEmoji}</span>
+                            </div>
+                            <div class="lesson-details">
+                                <span class="lesson-room">🏫 ${lesson.room}</span>
+                                <span class="lesson-teacher">👨‍🏫 ${lesson.teacher}</span>
+                            </div>
+                        </div>`;
+                    });
+                    
+                    html += `</div></div>`;
+                });
+                
+                html += `</div>`;
+            });
             
-            html += `<tr class="${weekRowClass}">
-                <td style="width: 20%;">—<\/td>
-                <td>
-                    <div class="lesson-row">
-                        <span class="pair-roman">${romanPair}</span>
-                        <span class="subject-text">${subjectDisplay}</span>
-                        <span class="room-info">🏫 ${lesson.room}</span>
-                        <span class="teacher-info">👨‍🏫 ${lesson.teacher}</span>
-                    </div>
-                <\/td>
-            <\/tr>`;
+            html += `</div>`;
         });
         
-        html += `<\/tbody><\/table><\/div><\/div>`;
+        html += `</div></div>`;
         return html;
     }
     
@@ -403,7 +443,7 @@
         
         let html = '';
         for (let week = 1; week <= 3; week++) {
-            const weekHtml = generateWeekHTML(week, filteredLessons);
+            const weekHtml = generateWeekGridHTML(week, filteredLessons);
             if (weekHtml) html += weekHtml;
         }
         

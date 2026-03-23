@@ -2,8 +2,8 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, initial-scale=1.0, viewport-fit=cover">
-    <title>📊 Dars jadvali - Mobile Friendly Grid View</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>📊 Dars jadvali - Hafta tanlash bilan</title>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
@@ -21,6 +21,49 @@
         @media (min-width: 768px) {
             h1 { font-size: 2.2rem; }
             h1 small { font-size: 1rem; }
+        }
+        
+        /* Week Checkbox Panel */
+        .week-checkbox-panel { 
+            background: #f8fafc; 
+            border-radius: 32px; 
+            padding: 16px 20px; 
+            margin-bottom: 24px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            align-items: center; 
+            gap: 24px;
+            border: 1px solid #e2e8f0;
+        }
+        .week-checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .week-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 40px;
+            transition: all 0.2s;
+            background: white;
+            border: 1px solid #cbd5e1;
+        }
+        .week-checkbox-item:hover { background: #f1f5f9; transform: scale(1.02); }
+        .week-checkbox-item input { width: 18px; height: 18px; cursor: pointer; margin: 0; }
+        .week-checkbox-item label { font-weight: 600; cursor: pointer; margin: 0; font-size: 0.9rem; }
+        .week-checkbox-item.week1-checkbox { border-left: 3px solid #1565c0; }
+        .week-checkbox-item.week2-checkbox { border-left: 3px solid #2e7d32; }
+        .week-checkbox-item.week3-checkbox { border-left: 3px solid #ef6c00; }
+        
+        @media (min-width: 768px) {
+            .week-checkbox-panel { padding: 16px 24px; gap: 32px; }
+            .week-checkbox-item { padding: 8px 18px; }
+            .week-checkbox-item input { width: 20px; height: 20px; }
+            .week-checkbox-item label { font-size: 1rem; }
         }
         
         .filter-panel { background: #e8f0fe; border-radius: 32px; padding: 16px 20px; margin-bottom: 24px; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; }
@@ -59,36 +102,19 @@
         .week-header-2 { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
         .week-header-3 { background: linear-gradient(135deg, #ef6c00, #ffb74d); }
         
-        /* Mobile Friendly Grid - responsive */
         .week-content { padding: 16px; background: #f8fafc; }
-        
-        @media (min-width: 768px) {
-            .week-content { padding: 24px; }
-        }
+        @media (min-width: 768px) { .week-content { padding: 24px; } }
         
         .calendar-grid { 
             display: grid; 
             grid-template-columns: 1fr; 
             gap: 16px; 
         }
+        @media (min-width: 480px) { .calendar-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 768px) { .calendar-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+        @media (min-width: 1024px) { .calendar-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1280px) { .calendar-grid { grid-template-columns: repeat(4, 1fr); } }
         
-        @media (min-width: 480px) {
-            .calendar-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        
-        @media (min-width: 768px) {
-            .calendar-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        }
-        
-        @media (min-width: 1024px) {
-            .calendar-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        
-        @media (min-width: 1280px) {
-            .calendar-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-        
-        /* Lesson Card Styles */
         .lesson-card { 
             background: white; 
             border-radius: 20px; 
@@ -102,124 +128,27 @@
         }
         .lesson-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
         
-        .card-header { 
-            padding: 12px 14px; 
-            border-bottom: 2px solid;
-            background: #fef9e3;
-        }
+        .card-header { padding: 12px 14px; border-bottom: 2px solid; background: #fef9e3; }
         .card-header-week1 { background: #e3f2fd; border-bottom-color: #1565c0; }
         .card-header-week2 { background: #e8f5e9; border-bottom-color: #2e7d32; }
         .card-header-week3 { background: #fff8e7; border-bottom-color: #ef6c00; }
         
-        /* Date and Day side by side */
-        .date-day-row { 
-            display: flex; 
-            flex-wrap: wrap; 
-            align-items: baseline; 
-            gap: 8px; 
-            margin-bottom: 8px;
-        }
-        .card-date { 
-            font-size: 1.1rem; 
-            font-weight: 700; 
-            color: #1e4663; 
-            background: rgba(0,0,0,0.05);
-            padding: 2px 10px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-        .card-day { 
-            font-size: 0.9rem; 
-            font-weight: 500; 
-            color: #5a6e8a; 
-            background: rgba(0,0,0,0.03);
-            padding: 2px 10px;
-            border-radius: 20px;
-            display: inline-block;
-        }
+        .date-day-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+        .card-date { font-size: 1.1rem; font-weight: 700; color: #1e4663; background: rgba(0,0,0,0.05); padding: 2px 10px; border-radius: 20px; display: inline-block; }
+        .card-day { font-size: 0.9rem; font-weight: 500; color: #5a6e8a; background: rgba(0,0,0,0.03); padding: 2px 10px; border-radius: 20px; display: inline-block; }
         
-        /* Sheet and Pair side by side */
-        .sheet-pair-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px;
-            margin-top: 6px;
-        }
-        .card-group { 
-            font-size: 0.9rem; 
-            font-weight: 700; 
-            color: #004182; 
-            background: #d4e4ff; 
-            border-radius: 20px; 
-            padding: 4px 12px; 
-            display: inline-block;
-        }
-        .card-pair { 
-            display: inline-block; 
-            background: #1e4663; 
-            color: white; 
-            border-radius: 30px; 
-            padding: 4px 12px; 
-            font-size: 0.8rem; 
-            font-weight: 600; 
-        }
+        .sheet-pair-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
+        .card-group { font-size: 0.9rem; font-weight: 700; color: #004182; background: #d4e4ff; border-radius: 20px; padding: 4px 12px; display: inline-block; }
+        .card-pair { display: inline-block; background: #1e4663; color: white; border-radius: 30px; padding: 4px 12px; font-size: 0.8rem; font-weight: 600; }
         
         .card-body { padding: 12px 14px; flex: 1; }
-        .card-subject { 
-            font-size: 0.95rem; 
-            font-weight: 600; 
-            color: #0f2b3d; 
-            margin-bottom: 10px; 
-            line-height: 1.4; 
-        }
-        
-        /* Larger font for lesson number */
-        .card-number { 
-            display: inline-block; 
-            background: #004182; 
-            color: white; 
-            border-radius: 30px; 
-            padding: 4px 10px; 
-            font-size: 0.9rem; 
-            font-weight: 600;
-            margin-left: 8px;
-        }
+        .card-subject { font-size: 0.95rem; font-weight: 600; color: #0f2b3d; margin-bottom: 10px; line-height: 1.4; }
+        .card-number { display: inline-block; background: #004182; color: white; border-radius: 30px; padding: 4px 10px; font-size: 0.9rem; font-weight: 600; margin-left: 8px; }
         .lesson-number-emoji { display: inline-block; font-size: 0.85rem; margin-left: 4px; }
         
-        .card-footer { 
-            padding: 10px 14px; 
-            background: #f9fafb; 
-            border-top: 1px solid #e2e8f0; 
-            display: flex; 
-            gap: 10px; 
-            flex-wrap: wrap; 
-            align-items: center;
-        }
-        
-        /* Larger font for room */
-        .card-room { 
-            background: #f0e6d2; 
-            border-radius: 20px; 
-            padding: 5px 12px; 
-            font-size: 0.85rem; 
-            font-weight: 600;
-            color: #664d00; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 4px; 
-        }
-        .card-teacher { 
-            background: #d4e4ff; 
-            border-radius: 20px; 
-            padding: 5px 12px; 
-            font-size: 0.8rem; 
-            font-weight: 500;
-            color: #003b6f; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 4px; 
-        }
+        .card-footer { padding: 10px 14px; background: #f9fafb; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .card-room { background: #f0e6d2; border-radius: 20px; padding: 5px 12px; font-size: 0.85rem; font-weight: 600; color: #664d00; display: inline-flex; align-items: center; gap: 4px; }
+        .card-teacher { background: #d4e4ff; border-radius: 20px; padding: 5px 12px; font-size: 0.8rem; font-weight: 500; color: #003b6f; display: inline-flex; align-items: center; gap: 4px; }
         
         @media (min-width: 768px) {
             .card-header { padding: 14px 16px; }
@@ -236,9 +165,7 @@
         }
         
         .footer-note { margin-top: 24px; color: #346392; display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.75rem; }
-        @media (min-width: 768px) {
-            .footer-note { gap: 32px; font-size: 0.85rem; }
-        }
+        @media (min-width: 768px) { .footer-note { gap: 32px; font-size: 0.85rem; } }
         
         .week-info { background: #f8f9fa; border-radius: 30px; padding: 8px 16px; margin-bottom: 20px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
         .week-badge { background: #e2eaf2; border-radius: 30px; padding: 4px 10px; font-size: 0.75rem; }
@@ -261,11 +188,13 @@
         
         .button-group { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
         .empty-message { text-align: center; padding: 30px 20px; color: #6b7c93; font-style: italic; font-size: 0.9rem; }
+        
+        .week-stats { font-size: 0.8rem; color: #5a6e8a; margin-left: 8px; }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <h1>📊 Dars jadvali <small>Mobile Friendly Grid View</small></h1>
+    <h1>📊 Dars jadvali <small>Hafta tanlash bilan</small></h1>
     
     <div class="color-key">
         <div class="color-key-item"><div class="color-box week1"></div><span>1-hafta</span></div>
@@ -279,6 +208,25 @@
         <div id="week3Badge" class="week-badge">❌ 3-hafta</div>
         <div id="totalLessonsInfo">📊 Jami: 0 ta dars</div>
         <div id="sheetsCountInfo">📋 Guruhlar: 0</div>
+    </div>
+    
+    <!-- Week Checkbox Panel -->
+    <div class="week-checkbox-panel">
+        <div class="week-checkbox-group">
+            <div class="week-checkbox-item week1-checkbox">
+                <input type="checkbox" id="week1Checkbox" checked>
+                <label for="week1Checkbox">📆 1-hafta</label>
+            </div>
+            <div class="week-checkbox-item week2-checkbox">
+                <input type="checkbox" id="week2Checkbox" checked>
+                <label for="week2Checkbox">📆 2-hafta</label>
+            </div>
+            <div class="week-checkbox-item week3-checkbox">
+                <input type="checkbox" id="week3Checkbox" checked>
+                <label for="week3Checkbox">📆 3-hafta</label>
+            </div>
+        </div>
+        <div class="week-stats" id="weekStats">Barcha haftalar ko'rsatilmoqda</div>
     </div>
     
     <div class="filter-panel">
@@ -313,6 +261,7 @@
         <span>🔹 Day + Date yonma-yon | Sheet + Pair yonma-yon</span>
         <span>🔢 Lesson number va Room shrifti kattalashtirilgan</span>
         <span>📱 Mobile friendly - ekranga moslashuvchan grid</span>
+        <span>✅ Haftalarni checkbox orqali tanlash mumkin</span>
     </div>
 </div>
 
@@ -331,6 +280,12 @@
     const totalLessonsInfo = document.getElementById('totalLessonsInfo');
     const sheetsCountInfo = document.getElementById('sheetsCountInfo');
     const weekInfo = document.getElementById('weekInfo');
+    
+    // Week checkboxes
+    const week1Checkbox = document.getElementById('week1Checkbox');
+    const week2Checkbox = document.getElementById('week2Checkbox');
+    const week3Checkbox = document.getElementById('week3Checkbox');
+    const weekStats = document.getElementById('weekStats');
     
     let scheduleData = null;
     let flatLessons = [];
@@ -457,6 +412,24 @@
         updateDateFilter();
     }
     
+    function getSelectedWeeks() {
+        const selected = [];
+        if (week1Checkbox.checked) selected.push(1);
+        if (week2Checkbox.checked) selected.push(2);
+        if (week3Checkbox.checked) selected.push(3);
+        return selected;
+    }
+    
+    function updateWeekStats(selectedWeeks) {
+        if (selectedWeeks.length === 3) {
+            weekStats.textContent = 'Barcha haftalar ko\'rsatilmoqda';
+        } else if (selectedWeeks.length === 0) {
+            weekStats.textContent = 'Hech qanday hafta tanlanmagan';
+        } else {
+            weekStats.textContent = `${selectedWeeks.map(w => w + '-hafta').join(', ')} ko'rsatilmoqda`;
+        }
+    }
+    
     function generateWeekCalendarHTML(weekNum, filteredLessons) {
         const weekLessons = filteredLessons.filter(l => l.week === weekNum);
         if (!weekLessons.length) return '';
@@ -486,12 +459,10 @@
             
             html += `<div class="lesson-card">
                 <div class="card-header ${cardHeaderClass}">
-                    <!-- Date and Day side by side -->
                     <div class="date-day-row">
                         <span class="card-date">📆 ${formattedDate}</span>
                         <span class="card-day">📅 ${lesson.day}</span>
                     </div>
-                    <!-- Sheet and Pair side by side -->
                     <div class="sheet-pair-row">
                         <span class="card-group">👥 ${lesson.sheetName}</span>
                         <span class="card-pair">${romanPair} - juftlik</span>
@@ -569,6 +540,18 @@
             filteredLessons = filteredLessons.filter(l => l.teacher === selectedTeacher);
         }
         
+        // Hafta filtri (checkbox orqali)
+        const selectedWeeks = getSelectedWeeks();
+        if (selectedWeeks.length > 0) {
+            filteredLessons = filteredLessons.filter(l => selectedWeeks.includes(l.week));
+        } else {
+            weeksContainer.innerHTML = '<div class="empty-message">📭 Hech qanday hafta tanlanmagan. Iltimos, kamida bitta haftani tanlang.</div>';
+            globalStatus.innerText = '📭 Hech qanday hafta tanlanmagan';
+            return;
+        }
+        
+        updateWeekStats(selectedWeeks);
+        
         if (filteredLessons.length === 0) {
             weeksContainer.innerHTML = '<div class="empty-message">📭 Filtr bo\'yicha dars topilmadi</div>';
             globalStatus.innerText = '📭 0 ta dars topildi';
@@ -585,8 +568,10 @@
         
         let html = '';
         for (let week = 1; week <= 3; week++) {
-            const weekHtml = generateWeekCalendarHTML(week, filteredLessons);
-            if (weekHtml) html += weekHtml;
+            if (selectedWeeks.includes(week)) {
+                const weekHtml = generateWeekCalendarHTML(week, filteredLessons);
+                if (weekHtml) html += weekHtml;
+            }
         }
         
         weeksContainer.innerHTML = html;
@@ -637,6 +622,11 @@
         displayAllWeeks();
         globalStatus.innerHTML = `✅ Filtrlar tozalandi (${flatLessons.length} ta dars)`;
     }
+    
+    // Week checkbox event listeners
+    week1Checkbox.addEventListener('change', () => displayAllWeeks());
+    week2Checkbox.addEventListener('change', () => displayAllWeeks());
+    week3Checkbox.addEventListener('change', () => displayAllWeeks());
     
     applyFilterBtn.addEventListener('click', () => displayAllWeeks());
     resetFilterBtn.addEventListener('click', () => resetFilters());

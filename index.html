@@ -12,6 +12,11 @@
         h1 { font-size: 2.2rem; font-weight: 550; color: #113355; display: flex; align-items: center; gap: 8px; margin: 0 0 8px; }
         h1 small { font-size: 1rem; font-weight: 400; color: #2c5a7a; margin-left: 12px; }
         
+        .week-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .week-tab { padding: 10px 25px; border-radius: 40px; cursor: pointer; font-weight: 600; transition: all 0.2s; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; }
+        .week-tab:hover { background: #e2e8f0; transform: translateY(-2px); }
+        .week-tab.active { background: #004182; color: white; border-color: #004182; box-shadow: 0 4px 12px rgba(0,65,130,0.3); }
+        
         .filter-panel { background: #e8f0fe; border-radius: 48px; padding: 22px 32px; margin-bottom: 32px; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 20px; }
         .filter-group { min-width: 180px; flex: 1; }
         .filter-group label { font-weight: 600; color: #1a4972; display: block; margin-bottom: 6px; font-size: 0.85rem; }
@@ -26,7 +31,7 @@
         
         .status { background: #e2f0ff; border-radius: 60px; padding: 10px 28px; color: #113a60; font-weight: 500; display: inline-block; margin-bottom: 22px; }
         
-        .table-wrapper { overflow-x: auto; border-radius: 28px; border: 1px solid #c5d6ed; background: #fcfdff; box-shadow: 0 12px 28px #bfd2e9; max-height: 70vh; overflow-y: auto; }
+        .table-wrapper { overflow-x: auto; border-radius: 28px; border: 1px solid #c5d6ed; background: #fcfdff; box-shadow: 0 12px 28px #bfd2e9; max-height: 70vh; overflow-y: auto; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
         th { background: #133d62; color: white; padding: 12px 15px; font-weight: 500; text-align: left; position: sticky; top: 0; z-index: 10; }
         td { padding: 12px 15px; border-bottom: 1px solid rgba(0,0,0,0.05); vertical-align: top; }
@@ -87,6 +92,12 @@
         .color-key-group span { font-size: 0.7rem; color: #666; }
         
         .button-group { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        
+        .week-container { margin-bottom: 40px; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .week-title { padding: 15px 20px; font-size: 1.5rem; font-weight: bold; color: white; margin: 0; }
+        .week-title-1 { background: linear-gradient(135deg, #1565c0, #42a5f5); }
+        .week-title-2 { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
+        .week-title-3 { background: linear-gradient(135deg, #ef6c00, #ffb74d); }
     </style>
 </head>
 <body>
@@ -124,15 +135,6 @@
     
     <div class="filter-panel">
         <div class="filter-group">
-            <label>📆 Hafta tanlash</label>
-            <select id="weekSelect">
-                <option value="all">— Barcha haftalar —</option>
-                <option value="1">1-hafta</option>
-                <option value="2">2-hafta</option>
-                <option value="3">3-hafta</option>
-            </select>
-        </div>
-        <div class="filter-group">
             <label>📅 Sana tanlash</label>
             <select id="dateSelect" disabled>
                 <option value="all">— Barcha sanalar —</option>
@@ -166,22 +168,10 @@
     
     <div id="globalStatus" class="status">⏳ JSON fayl yuklanmoqda...</div>
     
-    <div class="table-wrapper" id="tableWrapper">
-        <table id="scheduleTable">
-            <thead>
-                <tr>
-                    <th style="text-align: left; width: 20%;">SANA / KUN / GURUH</th>
-                    <th style="text-align: left; width: 80%;">O'TILADIGAN DARS</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <tr><td colspan="2" style="text-align:center; padding:3rem;">📌 JSON fayl yuklanmoqda...</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <div id="weeksContainer"></div>
     
     <div class="footer-note">
-        <span>🔹 Darslar hafta va sana bo'yicha tartiblangan</span>
+        <span>🔹 Har bir hafta alohida to'liq ko'rinishda</span>
         <span>🎨 Har bir hafta o'z rangiga ega</span>
         <span>🔢 Tartib raqamlari emoji ko'rinishida: 1️⃣, 2️⃣, 3️⃣...</span>
         <span>📅 Sana tanlash - JSON'dagi mavjud sanalardan</span>
@@ -190,16 +180,14 @@
 
 <script>
 (function() {
-    const weekSelect = document.getElementById('weekSelect');
     const dateSelect = document.getElementById('dateSelect');
     const sheetSelect = document.getElementById('sheetSelect');
     const teacherSelect = document.getElementById('teacherSelect');
     const applyFilterBtn = document.getElementById('applyFilterBtn');
     const resetFilterBtn = document.getElementById('resetFilterBtn');
     const exportImageBtn = document.getElementById('exportImageBtn');
-    const tableBody = document.getElementById('tableBody');
     const globalStatus = document.getElementById('globalStatus');
-    const tableWrapper = document.getElementById('tableWrapper');
+    const weeksContainer = document.getElementById('weeksContainer');
     const week1Badge = document.getElementById('week1Badge');
     const week2Badge = document.getElementById('week2Badge');
     const week3Badge = document.getElementById('week3Badge');
@@ -270,6 +258,13 @@
         if (week === 1) return 'date-header-row-1';
         if (week === 2) return 'date-header-row-2';
         if (week === 3) return 'date-header-row-3';
+        return '';
+    }
+    
+    function getWeekTitleClass(week) {
+        if (week === 1) return 'week-title-1';
+        if (week === 2) return 'week-title-2';
+        if (week === 3) return 'week-title-3';
         return '';
     }
     
@@ -352,18 +347,94 @@
         updateDateFilter();
     }
     
-    function displayLessons() {
+    function displayWeekLessons(weekNum, filteredLessons) {
+        if (!filteredLessons.length) return '';
+        
+        const weekLessons = filteredLessons.filter(l => l.week === weekNum);
+        if (!weekLessons.length) return '';
+        
+        let html = `<div class="week-container">
+            <div class="week-title ${getWeekTitleClass(weekNum)}">📆 ${weekNum}-HAFTA</div>
+            <div class="table-wrapper" style="border-radius: 0 0 28px 28px;">`;
+        html += `<table>`;
+        
+        let currentSheet = null;
+        let currentDay = null;
+        let currentDate = null;
+        
+        weekLessons.forEach(lesson => {
+            const week = lesson.week;
+            const weekRowClass = getWeekRowClass(week);
+            const dateHeaderRowClass = getDateHeaderRowClass(week);
+            const formattedDate = formatDisplayDate(lesson.date);
+            
+            // Sheet header
+            if (currentSheet !== lesson.sheetName) {
+                currentSheet = lesson.sheetName;
+                currentDay = null;
+                currentDate = null;
+                html += `<tr class="date-header-row ${dateHeaderRowClass}">
+                    <td colspan="2" style="padding: 10px 12px;">
+                        <div class="date-header-text">
+                            <span class="sheet-header-value">👥 ${lesson.sheetName}</span>
+                        </div>
+                     <\/td>
+                 <\/tr>`;
+            }
+            
+            // Day header
+            if (currentDay !== lesson.day) {
+                currentDay = lesson.day;
+                html += `<tr class="date-header-row ${dateHeaderRowClass}">
+                    <td colspan="2" style="padding: 8px 12px;">
+                        <div class="date-header-text">
+                            <span class="day-header-value">📅 ${lesson.day}</span>
+                        </div>
+                     <\/td>
+                 <\/tr>`;
+                currentDate = null;
+            }
+            
+            // Date header
+            if (currentDate !== lesson.date) {
+                currentDate = lesson.date;
+                html += `<tr class="date-header-row ${dateHeaderRowClass}">
+                    <td colspan="2" style="padding: 6px 12px;">
+                        <div class="date-header-text">
+                            <span class="date-header-value">📆 ${formattedDate}</span>
+                        </div>
+                     <\/td>
+                 <\/tr>`;
+            }
+            
+            const lessonNumberEmoji = toNumberEmoji(lesson.lessonNumber);
+            const subjectDisplay = `${lesson.subject} <span class="lesson-number-emoji">${lessonNumberEmoji}</span>`;
+            const romanPair = toRoman(lesson.pair);
+            
+            html += `<tr class="${weekRowClass}">
+                <td style="width: 0; padding: 0; font-size: 0; border: none;"><\/td>
+                <td style="padding-left: 0;">
+                    <div class="lesson-row">
+                        <span class="pair-roman">${romanPair}</span>
+                        <span class="subject-text">${subjectDisplay}</span>
+                        <span class="room-info">🏫 ${lesson.room}</span>
+                        <span class="teacher-info">👨‍🏫 ${lesson.teacher}</span>
+                    </div>
+                 <\/td>
+             <\/tr>`;
+        });
+        
+        html += `<\/table><\/div><\/div>`;
+        return html;
+    }
+    
+    function displayAllWeeks() {
         if (!flatLessons.length) {
-            tableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:3rem;">📌 Darslar topilmadi</td></tr>';
+            weeksContainer.innerHTML = '<div style="text-align:center; padding:3rem;">📌 Darslar topilmadi</div>';
             return;
         }
         
         let filteredLessons = [...flatLessons];
-        
-        const selectedWeek = weekSelect.value;
-        if (selectedWeek !== 'all') {
-            filteredLessons = filteredLessons.filter(l => l.week === parseInt(selectedWeek));
-        }
         
         const selectedDate = dateSelect.value;
         if (selectedDate !== 'all') {
@@ -381,11 +452,12 @@
         }
         
         if (filteredLessons.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:3rem;">📭 Filtr bo\'yicha dars topilmadi</td></tr>';
+            weeksContainer.innerHTML = '<div style="text-align:center; padding:3rem;">📭 Filtr bo\'yicha dars topilmadi</div>';
             globalStatus.innerText = '📭 0 ta dars topildi';
             return;
         }
         
+        // Darslarni hafta va sana bo'yicha tartiblash
         filteredLessons.sort((a, b) => {
             if (a.week !== b.week) return a.week - b.week;
             const dateA = dateToNumber(a.date);
@@ -395,54 +467,13 @@
         });
         
         let html = '';
-        let currentWeek = null;
-        let currentDateKey = null;
+        // Har bir haftani alohida ko'rsatish
+        for (let week = 1; week <= 3; week++) {
+            const weekHtml = displayWeekLessons(week, filteredLessons);
+            if (weekHtml) html += weekHtml;
+        }
         
-        filteredLessons.forEach(lesson => {
-            const week = lesson.week;
-            const weekRowClass = getWeekRowClass(week);
-            const weekHeaderClass = getWeekHeaderClass(week);
-            const dateHeaderRowClass = getDateHeaderRowClass(week);
-            const formattedDate = formatDisplayDate(lesson.date);
-            const dateKey = `${lesson.date}|${lesson.day}|${lesson.sheetName}`;
-            
-            if (currentWeek !== week) {
-                currentWeek = week;
-                html += `<tr class="week-header ${weekHeaderClass}"><td colspan="2" style="padding: 12px;"><strong>📆 ${currentWeek}-HAFTA</strong></td></tr>`;
-                currentDateKey = null;
-            }
-            
-            if (currentDateKey !== dateKey) {
-                currentDateKey = dateKey;
-                html += `<tr class="date-header-row ${dateHeaderRowClass}">
-                    <td colspan="2" style="padding: 10px 12px;">
-                        <div class="date-header-text">
-                            <span class="date-header-value">📆 ${formattedDate}</span>
-                            <span class="day-header-value">📅 ${lesson.day}</span>
-                            <span class="sheet-header-value">👥 ${lesson.sheetName}</span>
-                        </div>
-                    </td>
-                </tr>`;
-            }
-            
-            const lessonNumberEmoji = toNumberEmoji(lesson.lessonNumber);
-            const subjectDisplay = `${lesson.subject} <span class="lesson-number-emoji">${lessonNumberEmoji}</span>`;
-            const romanPair = toRoman(lesson.pair);
-            
-            html += `<tr class="${weekRowClass}">
-                <td style="width: 0; padding: 0; font-size: 0; border: none;"></td>
-                <td style="padding-left: 0;">
-                    <div class="lesson-row">
-                        <span class="pair-roman">${romanPair}</span>
-                        <span class="subject-text">${subjectDisplay}</span>
-                        <span class="room-info">🏫 ${lesson.room}</span>
-                        <span class="teacher-info">👨‍🏫 ${lesson.teacher}</span>
-                    </div>
-                </td>
-            </tr>`;
-        });
-        
-        tableBody.innerHTML = html;
+        weeksContainer.innerHTML = html;
         globalStatus.innerText = `📊 ${filteredLessons.length} ta dars ko'rsatilmoqda (jami: ${flatLessons.length})`;
     }
     
@@ -453,14 +484,8 @@
         }
         globalStatus.innerHTML = '<span class="loader"></span> Rasm tayyorlanmoqda...';
         try {
-            const element = document.getElementById('scheduleTable');
-            const originalOverflow = tableWrapper.style.overflow;
-            const originalMaxHeight = tableWrapper.style.maxHeight;
-            tableWrapper.style.overflow = 'visible';
-            tableWrapper.style.maxHeight = 'none';
+            const element = weeksContainer;
             const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#ffffff', logging: false, useCORS: true });
-            tableWrapper.style.overflow = originalOverflow;
-            tableWrapper.style.maxHeight = originalMaxHeight;
             const link = document.createElement('a');
             const date = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
             link.download = `dars_jadvali_${date}.png`;
@@ -491,7 +516,7 @@
             totalLessonsInfo.innerHTML = `📊 Jami: ${flatLessons.length} ta dars`;
             sheetsCountInfo.innerHTML = `📋 Guruhlar: ${scheduleData.sheetNames?.length || 0}`;
             updateFilters();
-            displayLessons();
+            displayAllWeeks();
             globalStatus.innerHTML = `✅ JSON yuklandi (${flatLessons.length} ta dars)`;
         } catch (error) {
             globalStatus.innerHTML = `❌ Xato: ${error.message} - darslar.json faylini topib bo\'lmadi`;
@@ -508,26 +533,24 @@
         teacherSelect.disabled = true;
         dateSelect.innerHTML = '<option value="all">— Barcha sanalar —</option>';
         dateSelect.disabled = true;
-        weekSelect.value = 'all';
-        tableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; padding:3rem;">📌 JSON fayl topilmadi. darslar.json faylini joylashtiring.</td></tr>';
+        weeksContainer.innerHTML = '<div style="text-align:center; padding:3rem;">📌 JSON fayl topilmadi. darslar.json faylini joylashtiring.</div>';
         scheduleData = null;
         flatLessons = [];
     }
     
     function resetFilters() {
-        weekSelect.value = 'all';
         dateSelect.value = 'all';
         sheetSelect.value = 'all';
         teacherSelect.value = 'all';
-        displayLessons();
+        displayAllWeeks();
         globalStatus.innerHTML = `✅ Filtrlar tozalandi (${flatLessons.length} ta dars)`;
     }
     
-    applyFilterBtn.addEventListener('click', () => displayLessons());
+    applyFilterBtn.addEventListener('click', () => displayAllWeeks());
     resetFilterBtn.addEventListener('click', () => resetFilters());
     exportImageBtn.addEventListener('click', () => exportAsImage());
-    [weekSelect, dateSelect, sheetSelect, teacherSelect].forEach(select => {
-        select.addEventListener('change', () => displayLessons());
+    [dateSelect, sheetSelect, teacherSelect].forEach(select => {
+        select.addEventListener('change', () => displayAllWeeks());
     });
     
     loadJSONFromFile();

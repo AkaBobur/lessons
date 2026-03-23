@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>📊 Dars jadvali - Hafta tanlash bilan</title>
+    <title>📊 Dars jadvali - Standart Export</title>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         * { box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
         body { background: #eaf0f8; margin: 0; padding: 16px; display: flex; justify-content: center; }
         .app-container { max-width: 1400px; width: 100%; background: white; border-radius: 32px; box-shadow: 0 20px 40px -12px #7c9bc0; padding: 20px; }
+        
+        /* Standart export uchun - laptop ekrani o'lchami */
+        .export-standard {
+            width: 1200px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+        }
         
         @media (min-width: 768px) {
             body { padding: 24px; }
@@ -23,7 +30,6 @@
             h1 small { font-size: 1rem; }
         }
         
-        /* Week Checkbox Panel */
         .week-checkbox-panel { 
             background: #f8fafc; 
             border-radius: 32px; 
@@ -32,7 +38,8 @@
             display: flex; 
             flex-wrap: wrap; 
             align-items: center; 
-            gap: 24px;
+            justify-content: space-between;
+            gap: 16px;
             border: 1px solid #e2e8f0;
         }
         .week-checkbox-group {
@@ -59,8 +66,10 @@
         .week-checkbox-item.week2-checkbox { border-left: 3px solid #2e7d32; }
         .week-checkbox-item.week3-checkbox { border-left: 3px solid #ef6c00; }
         
+        .week-stats { font-size: 0.8rem; color: #5a6e8a; background: white; padding: 6px 16px; border-radius: 40px; border: 1px solid #e2e8f0; }
+        
         @media (min-width: 768px) {
-            .week-checkbox-panel { padding: 16px 24px; gap: 32px; }
+            .week-checkbox-panel { padding: 16px 24px; }
             .week-checkbox-item { padding: 8px 18px; }
             .week-checkbox-item input { width: 20px; height: 20px; }
             .week-checkbox-item label { font-size: 1rem; }
@@ -74,6 +83,8 @@
         .action-btn:hover { background: #002c5c; }
         .action-btn.secondary { background: #2d6a4f; }
         .action-btn.secondary:hover { background: #1f4a37; }
+        .action-btn.export-all { background: #9b59b6; }
+        .action-btn.export-all:hover { background: #8e44ad; }
         
         @media (min-width: 768px) {
             .filter-panel { padding: 22px 32px; gap: 20px; }
@@ -188,13 +199,11 @@
         
         .button-group { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
         .empty-message { text-align: center; padding: 30px 20px; color: #6b7c93; font-style: italic; font-size: 0.9rem; }
-        
-        .week-stats { font-size: 0.8rem; color: #5a6e8a; margin-left: 8px; }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <h1>📊 Dars jadvali <small>Hafta tanlash bilan</small></h1>
+    <h1>📊 Dars jadvali <small>Standart export o'lchami</small></h1>
     
     <div class="color-key">
         <div class="color-key-item"><div class="color-box week1"></div><span>1-hafta</span></div>
@@ -210,7 +219,6 @@
         <div id="sheetsCountInfo">📋 Guruhlar: 0</div>
     </div>
     
-    <!-- Week Checkbox Panel -->
     <div class="week-checkbox-panel">
         <div class="week-checkbox-group">
             <div class="week-checkbox-item week1-checkbox">
@@ -262,6 +270,7 @@
         <span>🔢 Lesson number va Room shrifti kattalashtirilgan</span>
         <span>📱 Mobile friendly - ekranga moslashuvchan grid</span>
         <span>✅ Haftalarni checkbox orqali tanlash mumkin</span>
+        <span>📸 Export: standart 1200px kenglikda (laptop ekrani)</span>
     </div>
 </div>
 
@@ -281,7 +290,6 @@
     const sheetsCountInfo = document.getElementById('sheetsCountInfo');
     const weekInfo = document.getElementById('weekInfo');
     
-    // Week checkboxes
     const week1Checkbox = document.getElementById('week1Checkbox');
     const week2Checkbox = document.getElementById('week2Checkbox');
     const week3Checkbox = document.getElementById('week3Checkbox');
@@ -489,20 +497,31 @@
         const element = document.getElementById(`week-card-${weekNum}`);
         if (!element) return;
         
-        const originalHeight = element.style.height;
-        const originalMaxHeight = element.style.maxHeight;
-        element.style.height = 'auto';
-        element.style.maxHeight = 'none';
+        // Standart export o'lchami - 1200px (laptop ekrani)
+        const originalWidth = element.style.width;
+        const originalMaxWidth = element.style.maxWidth;
+        const originalMargin = element.style.margin;
         
-        globalStatus.innerHTML = `<span class="loader"></span> ${weekNum}-hafta rasm tayyorlanmoqda...`;
+        element.style.width = '1200px';
+        element.style.maxWidth = '1200px';
+        element.style.margin = '0 auto';
+        
+        globalStatus.innerHTML = `<span class="loader"></span> ${weekNum}-hafta rasm tayyorlanmoqda (1200px standart)...`;
         try {
-            const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#ffffff', logging: false, useCORS: true });
+            const canvas = await html2canvas(element, { 
+                scale: 2, 
+                backgroundColor: '#ffffff', 
+                logging: false, 
+                useCORS: true,
+                windowWidth: 1200,
+                windowHeight: element.scrollHeight
+            });
             const link = document.createElement('a');
             const date = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
             link.download = `dars_jadvali_${weekNum}_hafta_${date}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-            globalStatus.innerHTML = `✅ ${weekNum}-hafta rasmi muvaffaqiyatli saqlandi!`;
+            globalStatus.innerHTML = `✅ ${weekNum}-hafta rasmi muvaffaqiyatli saqlandi! (1200px standart)`;
             setTimeout(() => {
                 globalStatus.innerHTML = `📊 ${flatLessons.length} ta dars ko'rsatilmoqda (jami: ${flatLessons.length})`;
             }, 2000);
@@ -510,8 +529,9 @@
             console.error('Export error:', error);
             globalStatus.innerHTML = `❌ ${weekNum}-hafta rasm saqlashda xatolik yuz berdi!`;
         } finally {
-            element.style.height = originalHeight;
-            element.style.maxHeight = originalMaxHeight;
+            element.style.width = originalWidth;
+            element.style.maxWidth = originalMaxWidth;
+            element.style.margin = originalMargin;
         }
     }
     
@@ -540,7 +560,6 @@
             filteredLessons = filteredLessons.filter(l => l.teacher === selectedTeacher);
         }
         
-        // Hafta filtri (checkbox orqali)
         const selectedWeeks = getSelectedWeeks();
         if (selectedWeeks.length > 0) {
             filteredLessons = filteredLessons.filter(l => selectedWeeks.includes(l.week));
@@ -623,7 +642,6 @@
         globalStatus.innerHTML = `✅ Filtrlar tozalandi (${flatLessons.length} ta dars)`;
     }
     
-    // Week checkbox event listeners
     week1Checkbox.addEventListener('change', () => displayAllWeeks());
     week2Checkbox.addEventListener('change', () => displayAllWeeks());
     week3Checkbox.addEventListener('change', () => displayAllWeeks());

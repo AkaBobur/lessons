@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T16:34:23.791Z",
+  "generatedAt": "2026-04-08T16:44:00.054Z",
   "weeks": {
     "1": true,
     "2": false,
@@ -11,7 +11,6 @@
     "A.Buzurukov",
     "A.Nishonov",
     "A.Ostonaqulov",
-    "B. Yunusaliyev",
     "B.Mamadaliyeva",
     "B.Yunusaliyev",
     "D.G'ulomova",
@@ -3257,7 +3256,7 @@
               "subject": "3.1.Ingliz tilini o'qitishda darslarni rejalashtirish va tashkil etish",
               "group": "5-guruh",
               "room": "2 B",
-              "teacher": "B. Yunusaliyev",
+              "teacher": "B.Yunusaliyev",
               "lessonNumber": 5
             },
             {
@@ -3265,7 +3264,7 @@
               "subject": "3.2.Ingliz tilini o'qitishning amaliy- metodologik asoslari",
               "group": "5-guruh",
               "room": "2 B",
-              "teacher": "B. Yunusaliyev",
+              "teacher": "B.Yunusaliyev",
               "lessonNumber": 4
             }
           ],
@@ -3295,7 +3294,7 @@
               "subject": "3.1.Ingliz tilini o'qitishda darslarni rejalashtirish va tashkil etish",
               "group": "5-guruh",
               "room": "2 B",
-              "teacher": "B. Yunusaliyev",
+              "teacher": "B.Yunusaliyev",
               "lessonNumber": 2
             }
           ],

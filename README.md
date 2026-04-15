@@ -1,0 +1,1 @@
+FVPMM dars jadvali uchun
